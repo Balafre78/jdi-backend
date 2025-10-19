@@ -1,0 +1,46 @@
+services:
+  api:
+    build: .
+    container_name: jdi-api
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=mariadb
+      - DB_PORT=3306
+      - DB_USER=api
+      - DB_PASS=apipass
+      - DB_NAME=justdoit
+    depends_on:
+      - mariadb
+    command: sh -c "npm install && npm run build && npm start"
+
+  mariadb:
+    image: mariadb:11
+    container_name: jdi-mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpass
+      MARIADB_DATABASE: justdoit
+      MARIADB_USER: api
+      MARIADB_PASSWORD: apipass
+    ports:
+      - "3306:3306"
+    volumes:
+      - jdi_mariadb_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: jdi-phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: root
+      PMA_PASSWORD: rootpass
+      APACHE_SERVER_NAME: localhost
+    ports:
+      - "8080:80"
+    depends_on:
+      - mariadb
+
+volumes:
+  jdi_mariadb_data:

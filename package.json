@@ -11,11 +11,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.18.3",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "reflect-metadata": "^0.2.2"
+    "mysql2": "^3.15.2",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.27"
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",
