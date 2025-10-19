@@ -1,5 +1,8 @@
 import { DataSource } from "typeorm";
 import { Config } from "./config";
+import { User } from '../models/User';
+import { Todolist } from '../models/Todolist';
+import { Task } from '../models/Task';
 
 export const AppDataSource = new DataSource({
     type: "mariadb",
@@ -10,7 +13,7 @@ export const AppDataSource = new DataSource({
     database: Config.database.database,
     synchronize: Config.nodeEnv === 'development',
     logging: true,
-    entities: [],
+    entities: [User, Todolist, Task],
     subscribers: [],
     migrations: [],
 })
