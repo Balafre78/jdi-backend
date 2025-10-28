@@ -1,0 +1,5 @@
+@auth_token = token_here
+
+### Get current user profile
+GET http://localhost:3000/user/me
+Authorization: Bearer {{auth_token}}
