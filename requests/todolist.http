@@ -1,5 +1,5 @@
-@auth_token = token_here
-@todolist_id = id_here
+@auth_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM0NjM4ZTY1LWU1NTctNGQ5Ni1iNDY1LThmMWUzMGQ4MTM3OCIsImVtYWlsIjoidGVzdHVzZXJAZXhhbXBsZS5jb20iLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzYzMDk2NTI5LCJleHAiOjE3NjMxMDAxMjl9.9uRR8Yvevh89WddVRXzT2lHw0CLUiF4IhY-GlbZ_Uv8
+@todolist_id = ba491b42-34e0-4c14-9a79-a4308750b790
 
 ### Create a new todo list
 POST http://localhost:3000/todolist
@@ -22,3 +22,13 @@ Authorization: Bearer {{auth_token}}
 ### Edit one todolist by ID
 PATCH http://localhost:3000/todolist/@todolist_id
 Authorization: Bearer {{auth_token}}
+
+### Add a new task
+POST http://localhost:3000/todolist/@todolist_id/task
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "name": "The task one",
+  "description": "Beautiful description, right?"
+}

@@ -7,7 +7,7 @@ export class Todolist extends BaseEntity {
   @PrimaryGeneratedColumn("uuid", { name: 'id' })
   id: string;
 
-  @Column({ type: 'varchar', name: 'title', unique: true, length: 64 })
+  @Column({ type: 'varchar', name: 'title', length: 64 })
   title: string;
 
   @Column({ type: 'text', name: 'description', nullable: true })

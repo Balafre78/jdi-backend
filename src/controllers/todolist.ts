@@ -2,6 +2,7 @@ import { NextFunction, Response } from "express";
 import { AuthRequest } from "../middlewares/authMiddleware";
 import { Todolist } from "../models/Todolist";
 import { Task } from '../models/Task';
+import {CreateTaskRequest, TaskStatus, UpdateTaskRequest} from "../types/api";
 
 export const getAllTodolist = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
@@ -94,7 +95,7 @@ export const createTask = async (req: AuthRequest, res: Response, next: NextFunc
     const { todoId } = req.params;
     if (!todoId) return res.status(400).json({ message: 'Todolist ID is missing' });
     if (!req.body) return res.status(400).json({ message: 'Request body is missing' });
-    const { name, description } = req.body;
+    const { name, description } = req.body as CreateTaskRequest;
     const todo: Todolist = (await Todolist.find({
       where: { owner: req.user, id: todoId },
       relations: { tasks: true }
@@ -112,7 +113,7 @@ export const createTask = async (req: AuthRequest, res: Response, next: NextFunc
   }
 }
 
-export const editTask = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const deleteTask = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { todoId, taskId } = req.params;
     if (!todoId) return res.status(400).json({ message: 'Todolist ID is missing' });
@@ -122,7 +123,7 @@ export const editTask = async (req: AuthRequest, res: Response, next: NextFuncti
       relations: { tasks: true }
     }))[0];
     if (!todo) return res.status(404).json({ message: 'Todolist not found' });
-    const task = todo.tasks.find((task: Task) => task.id === todoId);
+    const task = todo.tasks.find((task: Task) => task.id == taskId);
     if (!task) return res.status(404).json({ message: 'Unknown task' });
     task.remove().then(() => {
       res.status(200).json({ message: 'Task deleted successfully' });
@@ -132,12 +133,25 @@ export const editTask = async (req: AuthRequest, res: Response, next: NextFuncti
   }
 }
 
-export const deleteTask = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const updateTask = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { todoId, taskId } = req.params;
     if (!todoId) return res.status(400).json({ message: 'Todolist ID is missing' });
     if (!taskId) return res.status(400).json({ message: 'Task ID is missing' });
-
+    const { name, description, status } = req.body as UpdateTaskRequest;
+    const todo: Todolist = (await Todolist.find({
+        where: { owner: req.user, id: todoId },
+        relations: { tasks: true }
+    }))[0];
+    if (!todo) return res.status(404).json({ message: 'Todolist not found' });
+    const task = todo.tasks.find((task: Task) => task.id == taskId);
+    if (!task) return res.status(404).json({ message: 'Unknown task' });
+    if (name) task.name = name;
+    if (description) task.description = description;
+    if (status) task.status = status;
+    await task.save();
+    res.status(200).json({ message: 'Task updated successfully' });
+    console.log(task.status)
   } catch (error) {
     next(error);
   }

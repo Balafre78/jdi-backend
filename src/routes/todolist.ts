@@ -5,7 +5,7 @@ import {
   editTodolist,
   deleteTodolist,
   getAllTasks,
-  editTask,
+  updateTask,
   deleteTask,
   createTask
 } from "../controllers/todolist";
@@ -69,7 +69,7 @@ router.post('/:todoId/task', createTask);
  * @body {Partial<Task>} - Fields to update
  * @returns {Task} 200 - Updated task
  */
-router.patch('/:todoId/task/:taskId', editTask);
+router.patch('/:todoId/task/:taskId', updateTask);
 
 /**
  * @route DELETE /todolist/:todoId/task/:taskId

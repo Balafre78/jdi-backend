@@ -47,6 +47,10 @@ export interface UpdateTodolistRequest {
     archived?: boolean
 }
 
+export interface UpdateTodolistResponse {
+    message: string
+}
+
 // -------------------- Task --------------------
 export enum TaskStatus {
     TODO = 'todo',
@@ -69,6 +73,10 @@ export interface CreateTaskRequest {
 
 export interface UpdateTaskRequest {
     name?: string
-    description?: boolean
+    description?: string
     status?: TaskStatus
+}
+
+export interface UpdateTaskResponse {
+    message: string
 }
