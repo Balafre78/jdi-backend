@@ -40,9 +40,10 @@ export const editTodolist = async (req: AuthRequest, res: Response, next: NextFu
       where: { owner: req.user, id: todoId },
     }))[0];
     if (!todo) return res.status(404).json({ message: 'Todolist not found' });
-    const { title, description } = req.body;
+    const { title, description, archived } = req.body;
     if (title) todo.title = title;
     if (description) todo.description = description;
+    if (archived !== undefined) todo.archived = archived;
     await todo.save();
     res.status(200).json({ message: 'Todolist updated successfully' });
   } catch (error) {

@@ -38,7 +38,7 @@ services:
       PMA_PASSWORD: rootpass
       APACHE_SERVER_NAME: localhost
     ports:
-      - "8080:80"
+      - "3080:80"
     depends_on:
       - mariadb
 
