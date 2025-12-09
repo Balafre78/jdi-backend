@@ -199,7 +199,6 @@ export const updateTask = async (req: AuthRequest, res: Response, next: NextFunc
         // Save changes and send response
         await task.save();
         res.status(200).json({ message: 'Task updated successfully' });
-        console.log(task.status)
     } catch (error) {
         next(error);
     }

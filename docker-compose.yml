@@ -1,3 +1,4 @@
+name: jdi
 services:
   api:
     build: .
@@ -10,9 +11,10 @@ services:
       - DB_USER=api
       - DB_PASS=apipass
       - DB_NAME=justdoit
+    networks:
+      - jdi_network
     depends_on:
       - mariadb
-    command: sh -c "npm install && npm run build && npm start"
 
   mariadb:
     image: mariadb:11
@@ -25,6 +27,8 @@ services:
       MARIADB_PASSWORD: apipass
     ports:
       - "3306:3306"
+    networks:
+      - jdi_network
     volumes:
       - jdi_mariadb_data:/var/lib/mysql
 
@@ -39,8 +43,14 @@ services:
       APACHE_SERVER_NAME: localhost
     ports:
       - "3080:80"
+    networks:
+      - jdi_network
     depends_on:
       - mariadb
 
 volumes:
   jdi_mariadb_data:
+
+networks:
+    jdi_network:
+        driver: bridge
