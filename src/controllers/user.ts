@@ -3,6 +3,7 @@ import { AuthRequest } from "../middlewares/authMiddleware";
 
 export const getMe = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
+        // Exclude sensitive information before sending the authenticated user's data
         const user = {
             id: req.user.id,
             email: req.user.email,

@@ -8,7 +8,10 @@ export default defineConfig([
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
     plugins: { js },
     extends: ["js/recommended", "prettier"],
-    languageOptions: { globals: globals.node }
+    languageOptions: { globals: globals.node },
+    rules: {
+      "object-curly-spacing": ["error", "always"]
+    }
   },
   tseslint.configs.recommended
 ]);

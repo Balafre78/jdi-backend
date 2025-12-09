@@ -6,18 +6,20 @@ import type { LoginRequest, RegisterRequest } from "../types/api";
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        if (!req.body) return res.status(400).json({ message: 'Request body is missing', error: 'badRequest' });
+        // Checking body validity
+        if (!req.body) return res.status(400).json({message: 'Request body is missing', error: 'badRequest' });
         const { email, password } = req.body as LoginRequest;
-
         if (!email || !password) {
             return res.status(400).json({ message: 'Email and password are required', error: 'badRequest' });
         }
 
+        // Fetching user in database and compare password (hashed)
         const user: User = (await User.find({ where: { email: email } }))[0];
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(401).json({ message: 'Invalid credentials', error: 'invalidCredentials' });
         }
 
+        // Generating token and sending response
         const token = generateToken(user);
         res.status(200).json({
             message: 'Login successful',
@@ -38,23 +40,28 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        // Checking body validity
         if (!req.body) return res.status(400).json({ message: 'Request body is missing', error: 'badRequest' });
         const { email, username, firstName, lastName, password } = req.body as RegisterRequest;
         if (!email || !password || !username || !firstName || !lastName) {
             return res.status(400).json({ message: 'All fields are required', error: 'badRequest' });
         }
 
+        // Checking for existing user
         let user = (await User.find({ where: { email: email } }))[0];
         if (user) {
-            return res.status(409).json({ message: 'Email already in use', error: 'emailAlreadyUsed' });
+            return res.status(400).json({ message: 'Email already in use', error: 'emailAlreadyUsed' });
         }
         user = (await User.find({ where: { username: username } }))[0];
         if (user) {
-            return res.status(409).json({ message: 'Username already in use', error: 'usernameAlreadyUsed' });
+            return res.status(400).json({ message: 'Username already in use', error: 'usernameAlreadyUsed' });
         }
 
+        // Creating user and hashing password
         const hashedPassword = await bcrypt.hash(password, 10);
         user = await User.create({ email: email, username: username, firstName: firstName, lastName: lastName, password: hashedPassword }).save();
+
+        // Generating token and sending response
         const token = generateToken(user);
         res.status(200).json({
             message: 'Register successful',

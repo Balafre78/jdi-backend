@@ -14,13 +14,13 @@ export interface RegisterRequest {
 
 export interface AuthResponse {
     message: string
-    user: User
+    user: UserResponse
     token: string
     expiresIn: number
 }
 
 // -------------------- User --------------------
-export interface User {
+export interface UserResponse {
     id: string
     username: string
     email: string
@@ -29,7 +29,7 @@ export interface User {
 }
 
 // -------------------- Todolist --------------------
-export interface Todolist {
+export interface TodolistResponse {
     id: string
     title: string
     description: string
@@ -58,7 +58,7 @@ export enum TaskStatus {
     DONE = 'done'
 }
 
-export interface Task {
+export interface TaskResponse {
     id: string
     name: string
     description: string
